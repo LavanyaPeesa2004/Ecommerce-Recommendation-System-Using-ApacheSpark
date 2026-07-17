@@ -1,0 +1,764 @@
+{
+  "datasets": [
+    {
+      "name": "9ad42bcc",
+      "displayName": "TOP10",
+      "queryLines": [
+        "SELECT\r\n",
+        "    product_name,\r\n",
+        "    purchases\r\n",
+        "FROM top_trending_products\r\n",
+        "ORDER BY purchases DESC\r\n",
+        "LIMIT 10"
+      ]
+    },
+    {
+      "name": "5be6cc2a",
+      "displayName": "Database Tables Overview Snapshot",
+      "queryLines": [
+        "SHOW TABLES"
+      ]
+    },
+    {
+      "name": "378b6323",
+      "displayName": "Top 5 Recommended Products (ALS)",
+      "queryLines": [
+        "SELECT\r\n",
+        "    product_name,\r\n",
+        "    prediction\r\n",
+        "FROM recommended_products\r\n",
+        "ORDER BY prediction DESC;"
+      ]
+    },
+    {
+      "name": "8c238eb3",
+      "displayName": "Department Purchase Counts Summary Report",
+      "queryLines": [
+        "SELECT\r\n",
+        "    department,\r\n",
+        "    COUNT(*) AS total_purchases\r\n",
+        "FROM silver_customer_products\r\n",
+        "GROUP BY department\r\n",
+        "ORDER BY total_purchases DESC;"
+      ]
+    },
+    {
+      "name": "81e30c69",
+      "displayName": "Weekly Order Distribution Summary",
+      "queryLines": [
+        "SELECT\r\n",
+        "    CASE order_dow\r\n",
+        "        WHEN 0 THEN 'Sunday'\r\n",
+        "        WHEN 1 THEN 'Monday'\r\n",
+        "        WHEN 2 THEN 'Tuesday'\r\n",
+        "        WHEN 3 THEN 'Wednesday'\r\n",
+        "        WHEN 4 THEN 'Thursday'\r\n",
+        "        WHEN 5 THEN 'Friday'\r\n",
+        "        WHEN 6 THEN 'Saturday'\r\n",
+        "    END AS day_of_week,\r\n",
+        "    COUNT(*) AS total_orders\r\n",
+        "FROM silver_customer_products\r\n",
+        "GROUP BY order_dow\r\n",
+        "ORDER BY order_dow;"
+      ]
+    },
+    {
+      "name": "fbb06273",
+      "displayName": "Customer Purchase Counts by Hour of Day",
+      "queryLines": [
+        "SELECT\r\n",
+        "    order_hour_of_day,\r\n",
+        "    COUNT(*) AS total_orders\r\n",
+        "FROM silver_customer_products\r\n",
+        "GROUP BY order_hour_of_day\r\n",
+        "ORDER BY order_hour_of_day;"
+      ]
+    },
+    {
+      "name": "bd58f4d1",
+      "displayName": "Unique Customer Count Summary",
+      "queryLines": [
+        "SELECT COUNT(DISTINCT user_id) AS total_customers\r\n",
+        "FROM silver_customer_products;"
+      ]
+    },
+    {
+      "name": "2ec45dda",
+      "displayName": "Unique Product Count Summary",
+      "queryLines": [
+        "SELECT COUNT(DISTINCT product_id) AS total_products\r\n",
+        "FROM silver_customer_products;"
+      ]
+    },
+    {
+      "name": "8ad06040",
+      "displayName": "Unique Order Count Summary",
+      "queryLines": [
+        "SELECT COUNT(DISTINCT order_id) AS total_orders\r\n",
+        "FROM silver_customer_products;"
+      ]
+    },
+    {
+      "name": "c1c45292",
+      "displayName": "Distinct Department Count in Customer Products Dataset",
+      "queryLines": [
+        "SELECT COUNT(DISTINCT department) AS total_departments\r\n",
+        "FROM silver_customer_products;"
+      ]
+    },
+    {
+      "name": "d8e7f5d5",
+      "displayName": "Top Ten Aisle Purchase Volumes Summary",
+      "queryLines": [
+        "SELECT\r\n",
+        "    department,\r\n",
+        "    order_dow,\r\n",
+        "    COUNT(*) AS total_orders\r\n",
+        "FROM silver_customer_products\r\n",
+        "GROUP BY department, order_dow;"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "8fb9c4da",
+      "displayName": "DashBoard1",
+      "layout": [
+        {
+          "widget": {
+            "name": "top-10-trending-products",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9ad42bcc",
+                  "fields": [
+                    {
+                      "name": "sum(purchases)",
+                      "expression": "SUM(`purchases`)"
+                    },
+                    {
+                      "name": "product_name",
+                      "expression": "`product_name`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "showTitle": true,
+                "title": "Top 10 Trending Products",
+                "headerAlignment": "center"
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(purchases)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "product_name",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBorderColor": {
+                "dark": "#EF5E0B"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 5,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "top-5-recommended-products-als",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "378b6323",
+                  "fields": [
+                    {
+                      "name": "sum(prediction)",
+                      "expression": "SUM(`prediction`)"
+                    },
+                    {
+                      "name": "product_name",
+                      "expression": "`product_name`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "showTitle": true,
+                "headerAlignment": "center",
+                "title": "Top 5 Recommended Products (ALS)"
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(prediction)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "product_name",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBorderColor": {
+                "dark": "#0DF437"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 8,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "purchases-by-department",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8c238eb3",
+                  "fields": [
+                    {
+                      "name": "sum(total_purchases)",
+                      "expression": "SUM(`total_purchases`)"
+                    },
+                    {
+                      "name": "department",
+                      "expression": "`department`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "showTitle": true,
+                "title": "Purchases by Department",
+                "headerAlignment": "center"
+              },
+              "style": {
+                "fontColor": {
+                  "dark": "#E9E8F0"
+                }
+              },
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "sum(total_purchases)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "department",
+                  "displayName": "Department",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                },
+                "extra": [
+                  {
+                    "fieldName": "department"
+                  },
+                  {
+                    "fieldName": "department"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBorderColor": {
+                "dark": "#D90ED9"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 2,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "410a4b16",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "81e30c69",
+                  "fields": [
+                    {
+                      "name": "day_of_week",
+                      "expression": "`day_of_week`"
+                    },
+                    {
+                      "name": "sum(total_orders)",
+                      "expression": "SUM(`total_orders`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "showTitle": true,
+                "headerAlignment": "center",
+                "title": "Orders by Day of Week"
+              },
+              "mark": {
+                "marker": {
+                  "shape": "circle"
+                },
+                "linePatterns": [
+                  "solid"
+                ]
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "day_of_week",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_orders)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBorderColor": {
+                "dark": "#0586F0"
+              }
+            }
+          },
+          "position": {
+            "x": 5,
+            "y": 2,
+            "width": 4,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "orders-by-hour-of-day",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "fbb06273",
+                  "fields": [
+                    {
+                      "name": "order_hour_of_day",
+                      "expression": "`order_hour_of_day`"
+                    },
+                    {
+                      "name": "sum(total_orders)",
+                      "expression": "SUM(`total_orders`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "showTitle": true,
+                "headerAlignment": "center",
+                "title": "Orders by Hour of Day"
+              },
+              "widgetType": "area",
+              "encodings": {
+                "x": {
+                  "fieldName": "order_hour_of_day",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_orders)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBorderColor": {
+                "dark": "#B3D710"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "206209",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "bd58f4d1",
+                  "fields": [
+                    {
+                      "name": "sum(total_customers)",
+                      "expression": "SUM(`total_customers`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "TOTAL COUSTOMERS",
+                "headerAlignment": "center"
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_customers)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#91041D"
+              },
+              "widgetBorderColor": {
+                "dark": "#D3B21C"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "tota",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "2ec45dda",
+                  "fields": [
+                    {
+                      "name": "sum(total_products)",
+                      "expression": "SUM(`total_products`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "TOTAL PRODUCTS",
+                "headerAlignment": "center"
+              },
+              "style": {
+                "fontColor": {
+                  "dark": "#0BF2D5"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_products)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#420648"
+              },
+              "widgetBorderColor": {
+                "dark": "#1484E1"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "total-orders",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ad06040",
+                  "fields": [
+                    {
+                      "name": "sum(total_orders)",
+                      "expression": "SUM(`total_orders`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#282427"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "TOTAL ORDERS",
+                "headerAlignment": "center"
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_orders)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#4AC4A1"
+              },
+              "widgetBorderColor": {
+                "dark": "#B10E49"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "total-departments",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c1c45292",
+                  "fields": [
+                    {
+                      "name": "sum(total_departments)",
+                      "expression": "SUM(`total_departments`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "TOTAL DEPARTMENTS",
+                "headerAlignment": "center"
+              },
+              "style": {
+                "fontColor": {
+                  "dark": "#F0E20E"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_departments)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#7C63D0"
+              },
+              "widgetBorderColor": {
+                "dark": "#2DD21D"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "customer-purchase-activity-by-department-day",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d8e7f5d5",
+                  "fields": [
+                    {
+                      "name": "sum(total_orders)",
+                      "expression": "SUM(`total_orders`)"
+                    },
+                    {
+                      "name": "order_dow",
+                      "expression": "`order_dow`"
+                    },
+                    {
+                      "name": "department",
+                      "expression": "`department`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "showTitle": true,
+                "title": "Customer Purchase Activity by Department & Day",
+                "headerAlignment": "center"
+              },
+              "widgetType": "heatmap",
+              "encodings": {
+                "x": {
+                  "fieldName": "order_dow",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "department",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "color": {
+                  "fieldName": "sum(total_orders)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBorderColor": {
+                "dark": "#CD1144"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 8,
+            "width": 6,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
